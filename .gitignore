@@ -7,3 +7,6 @@
 /sf4/var/
 /sf4/vendor/
 ###< symfony/framework-bundle ###
+
+/old
+docker-compose.yml
