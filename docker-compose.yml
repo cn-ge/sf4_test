@@ -12,6 +12,7 @@ services:
           - php
 
     mysql:
+        # build: .docker/mysql
         image: mysql:8
         container_name: sf4_mysql
         volumes:
@@ -19,6 +20,7 @@ services:
         command:
             - "--default-authentication-plugin=mysql_native_password"
             - "--lower_case_table_names=1"
+        restart: always
         environment:
             MYSQL_ROOT_PASSWORD: root
             MYSQL_DATABASE: docker-symfony-4
