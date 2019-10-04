@@ -21,6 +21,7 @@ RUN sed -i '/Global configuration/a \
 ServerName localhost \
 ' /etc/apache2/apache2.conf
 
+RUN service apache2 restart
 
 RUN rm -f /run/apache2/apache2.pid
 

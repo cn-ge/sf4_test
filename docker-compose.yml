@@ -10,39 +10,28 @@ services:
           - ./sf4:/home/wwwroot/sf4
         depends_on:
           - php
+        links: 
+          - mysql:mysql
 
     mysql:
-        image: mysql:latest
         container_name: mysql
-        # volumes:
-        #     - .docker/data/db:/var/lib/mysql
-        # command: "tail -F anything"
-            # - "--default-authentication-plugin=mysql_native_password"
-            # - "--lower_case_table_names=1"
-            # - "--character-set-server=utf8"
+        image: mysql/mysql-server
         environment:
             MYSQL_ROOT_PASSWORD: root
-            MYSQL_DATABASE: docker-symfony-4
+            MYSQL_DATABASE: sf4
             MYSQL_USER: admin
             MYSQL_PASSWORD: admin
+        user: "1000:1000"
+        command:
+            - "--default-authentication-plugin=mysql_native_password"
+            - "--lower_case_table_names=1"
+            - "--character-set-server=utf8"
+        volumes:
+            - ./.docker/data/db:/var/lib/mysql
         ports:
             - 3306:3306
             - 33060:33060
-
-    db:
-        image: mysql:5.7
-        container_name: mysql57
-        command: --default-authentication-plugin=mysql_native_password tail -F anything
-        environment:
-            MYSQL_DATABASE: test
-            MYSQL_USER: admin
-            MYSQL_PASSWORD: admin
-            MYSQL_RANDOM_ROOT_PASSWORD: root
-        # volumes:
-        #     - .docker/data:/var/lib/mysql
-        ports:
-            - 3300:3306
-
+            
     php:
         build: .docker/php
         container_name: php
@@ -63,21 +52,14 @@ services:
           PMA_PORT: 3306
         ports:
             - 8080:80
-        links:
+        depends_on:
             - mysql
-
-    phpmyadmin2:
-        image: phpmyadmin/phpmyadmin
-        container_name: phpmyadmin2
-        restart: always
-        environment:
-          PMA_HOST: mysql57
-          PMA_PORT: 3306
-        ports:
-            - 8086:80
         
     maildev:
         image: djfarrelly/maildev
         container_name: maildev
         ports:
           - 8001:80
+
+
+
